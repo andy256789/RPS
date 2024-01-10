@@ -8,17 +8,13 @@ function getComputerChoice(){
 
 function getPlayerChoice(){
     let choice = prompt("What is your choice?(rock/paper/scissors):");
-    console.log(typeof choice);
     switch (choice.toLocaleLowerCase()) {
         case "rock":
             return 1;
-            break;
         case "paper":
             return 2;
-            break;
         case "scissors":
             return 3;
-            break;
         default:
             console.log("Invalid input");
             break;
@@ -34,22 +30,72 @@ function getPlayerChoice(){
 // So the first one wins if result = 1, -2
 // Second one wins if result = -1, 2
 
-function playGame(computerChoice,playerChoice){
-    console.log("computer: " + computerChoice);
-    console.log("player: " + playerChoice);
+function playRound(computerChoice,playerChoice){
+    switch(computerChoice){
+        case 1:
+            console.log("Computer played rock");
+            break;
+        case 2:
+            console.log("Computer played paper");
+            break;
+        case 3:
+            console.log("Computer played scissors");
+            break;
+    }
     let winner = computerChoice - playerChoice;
     switch (winner){
         case -2:
         case 1:
-            console.log("Computer won!");
-            break;
+            return "computer";
         case -1:
         case 2:
-            console.log("Player won!");
-            break;
-        default:
-            console.log("It was a tie");
+            return "player";
+        case 0:
+            return "tie";
+
     }
 }
 
-playGame(getComputerChoice(),getPlayerChoice());
+function Game(){
+    let playerScore=0;
+    let computerScore=0;
+
+    while(true){
+        let round = playRound(getComputerChoice(),getPlayerChoice());
+        if(round==="tie"){
+            console.log("Round was a tie. ")
+        }
+        if(round==="player"){
+            console.log("Player has won the round! ");
+            playerScore++;
+        }
+        if(round==="tie"){
+            console.log("Computer has won the round! ");
+            computerScore++;
+        }
+        console.info(`SCORE:  Player: ${playerScore}   Computer: ${computerScore}`);
+
+        if(playerScore===5){
+            console.log("Player has won the game! :)");
+            break;
+        }
+        if(computerScore===5){
+            console.log("Computer has won the game! :(");
+            break;
+        }
+    }
+}
+
+function playGame(){
+    do{
+        Game();
+        let userInput = prompt("Play again?yes/no").toLowerCase();
+        if(userInput==="yes"){
+            continue;
+        }
+        else{
+            break;
+        }
+    }while(true);
+}
+playGame();
