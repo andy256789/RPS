@@ -1,101 +1,72 @@
+const rock = document.querySelector("#rock");
+const paper = document.querySelector("#paper");
+const scissors = document.querySelector("#scissors");
+
+const log = document.querySelector(".log");
+const result = document.querySelector(".result");
+
+const playerScr = document.querySelector(".player");
+const computerScr = document.querySelector(".computer");
+
+let playerScore=0;
+let computerScore=0;
+
+
+rock.addEventListener("click", () => playRound(getComputerChoice(), "rock"));
+paper.addEventListener("click", () => playRound(getComputerChoice(), "paper"));
+scissors.addEventListener("click", () => playRound(getComputerChoice(), "scissors"));
+
+
 function getComputerChoice(){
     let choice=(Math.floor((Math.random()*100))%3+1);
-    return choice;
-}
-// 1 is Rock
-// 2 is Paper
-// 3 is Scissors
-
-function getPlayerChoice(){
-    let choice = prompt("What is your choice?(rock/paper/scissors):");
-    switch (choice.toLocaleLowerCase()) {
-        case "rock":
-            return 1;
-        case "paper":
-            return 2;
-        case "scissors":
-            return 3;
-        default:
-            console.log("Invalid input");
-            break;
-    }
-}
-
-// scissors - paper = 1 -> so scissors wins
-// rock - scissors = -2 -> rock wins
-
-// rock - paper = -1 -> paper wins
-// scissors - rock = 2 -> rock wins
-
-// So the first one wins if result = 1, -2
-// Second one wins if result = -1, 2
-
-function playRound(computerChoice,playerChoice){
-    switch(computerChoice){
+    switch(choice){
         case 1:
-            console.log("Computer played rock");
-            break;
+            return "rock";
         case 2:
-            console.log("Computer played paper");
-            break;
+            return "paper";
         case 3:
-            console.log("Computer played scissors");
-            break;
-    }
-    let winner = computerChoice - playerChoice;
-    switch (winner){
-        case -2:
-        case 1:
-            return "computer";
-        case -1:
-        case 2:
-            return "player";
-        case 0:
-            return "tie";
-
+            return "scissors";
     }
 }
 
-function Game(){
-    let playerScore=0;
-    let computerScore=0;
-
-    while(true){
-        let round = playRound(getComputerChoice(),getPlayerChoice());
-        if(round==="tie"){
-            console.log("Round was a tie. ")
-        }
-        if(round==="player"){
-            console.log("Player has won the round! ");
+function playRound(computer, player) {
+    log.textContent = `COMPUTER PLAYED ${computer.toUpperCase()}`;
+    switch(true){
+        case computer==="rock"&&player==="paper":
+        case computer==="paper"&&player==="scissors":
+        case computer==="scissors"&&player==="rock":
+            result.textContent = "Player has won the round!";
             playerScore++;
-        }
-        if(round==="tie"){
-            console.log("Computer has won the round! ");
-            computerScore++;
-        }
-        console.info(`SCORE:  Player: ${playerScore}   Computer: ${computerScore}`);
+            playerScr.textContent = `PLAYER: ${playerScore}`;
 
-        if(playerScore===5){
-            console.log("Player has won the game! :)");
+            if(playerScore===5){
+                log.textContent = "PLAYER HAS WON THE GAME";
+                result.textContent = "PLAYER HAS WON THE GAME";
+                playerScore = 0;
+                playerScr.textContent = `PLAYER: ${playerScore}`;
+                computerScore = 0;
+                computerScr.textContent = `COMPUTER: ${computerScore}`;
+            }
             break;
-        }
-        if(computerScore===5){
-            console.log("Computer has won the game! :(");
+
+        case player==="rock"&&computer==="paper":
+        case player==="paper"&&computer==="scissors":
+        case player==="scissors"&&computer==="rock":
+            result.textContent = "Computer has won the round!";
+            computerScore++;
+            computerScr.textContent = `COMPUTER: ${computerScore}`;
+
+            if(computerScore===5){
+                log.textContent = "COMPUTER HAS WON THE GAME";
+                result.textContent = "COMPUTER HAS WON THE GAME";
+                computerScore = 0;
+                computerScr.textContent = `COMPUTER: ${computerScore}`;
+                playerScore = 0;
+                playerScr.textContent = `PLAYER: ${playerScore}`;
+            }
             break;
-        }
+
+        default:
+            result.textContent = "The round was a tie.";
     }
 }
-
-function playGame(){
-    do{
-        Game();
-        let userInput = prompt("Play again?yes/no").toLowerCase();
-        if(userInput==="yes"){
-            continue;
-        }
-        else{
-            break;
-        }
-    }while(true);
-}
-playGame();
